@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% set active_page = 'Configuration' -%}
+
+{% block content %}
+  <form method=post enctype=multipart/form-data>
+    <div class="row">
+      <fieldset class="mb-3">
+	<legend>Content Selection</legend>
+	<select class="form-select" name="content_selection">
+	  <option value="none" selected>None (turn off)</option>
+	  {% for entry in entries %}
+	  <option value="{{ entry }}">{{ entry }}</option>
+	  {% endfor %}
+	</select>
+      </fieldset>
+      <div class="mb-3">
+	<label for=brightness class="form-label">Brightness</label>
+	<input class="form-control" type=number name=brightness min=1 max=100 value=50>
+      </div>
+      <div class="mb-3">
+	<button type=submit class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </form>
+{% endblock %}

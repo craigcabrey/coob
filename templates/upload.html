@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% set active_page = 'Upload' -%}
+
+{% block content %}
+<form method=post enctype=multipart/form-data>
+  <div class="mb-3">
+    <input class="form-control" type="file" name="file">
+  </div>
+  <div class="mb-3">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+</form>
+{% endblock %}

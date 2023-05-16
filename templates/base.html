@@ -1,0 +1,55 @@
+{% set navigation_bar = [
+    ('/', 'Configuration'),
+    ('/upload', 'Upload'),
+    ('/pixelit', 'Pixelate')
+] -%}
+
+{% set active_page = active_page|default('Configuration') -%}
+{% set scripts = scripts|default([]) -%}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="static/css/bootstrap.min.css" rel="stylesheet">
+  <title>Coob: {{ active_page }}</title>
+</head>
+<body>
+  <div class="container mt-5">
+    <ul class="nav nav-pills">
+      {% for href, name in navigation_bar %}
+      <li class="nav-item">
+	<a class="nav-link {% if name == active_page %} active {% endif %}" aria-current="page" href="{{ href }}">{{ name }}</a>
+      </li>
+      {% endfor %}
+      <li class="nav-item dropdown">
+	<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+	  System
+	</a>
+	<ul class="dropdown-menu">
+	  <li>
+	    <form action="/restart" method="post">
+	      <a class="dropdown-item" href="#" onclick="this.parentNode.submit();">Restart</a>
+	    </form>
+	  </li>
+	  <hr class="dropdown-divider">
+	  <li>
+	    <form action="/reboot" method="post">
+	      <a class="dropdown-item" href="#" onclick="this.parentNode.submit();">Reboot</a>
+	    </form>
+	  </li>
+	</ul>
+      </li>
+    </ul>
+    <hr>
+    <div class="container mt-3">
+      {% block content %} {% endblock %}
+    </div>
+  </div>
+  <script src="static/js/bootstrap.bundle.min.js"></script>
+  {% for script in scripts %}
+  <script src="{{ script }}"></script>
+  {% endfor %}
+</body>
+</html>

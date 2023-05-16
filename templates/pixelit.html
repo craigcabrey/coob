@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% set active_page = 'Pixelate' -%}
+{% set scripts = [
+  '/static/js/pixelit.min.js',
+  '/static/js/slim.select.min.js',
+  '/static/js/main.js',
+] -%}
+
+{% block content %}
+<div class="selectors">
+  <div class="mb-3">
+    <label id="uploadimage" class="form-label" for="pixlInput">Upload Image</label>
+    <input type="file" class="form-control" id="pixlInput">
+  </div>
+
+  <div class="row">
+    <div class="col mb-3">
+      <label for="blocksize" class="form-label">Block size: <span id="blockvalue">7</span></label>
+      <input class="form-range" value="7" type="range" min="2" max="25" id="blocksize">
+    </div>
+
+    <div class="col mb-3">
+      <div class="form-check">
+	<label for="greyscale" class="form-check-label">Greyscale</label>
+	<input class="form-check-input" type="checkbox" id="greyscale">
+      </div>
+      <div class="form-check">
+	<label for="palette" class="form-check-label">Palette</label>
+	<input class="form-check-input" type="checkbox"  id="palette">
+      </div>
+    </div>
+  </div>
+
+  <!-- max height -->
+  <div class="mb-3">
+    <label for="maxheight" class="form-label">Max Height</label>
+    <input class="form-control" type="input" id="maxheight" placeholder="Pixels">
+  </div>
+
+  <!-- max width -->
+  <div class="mb-3">
+    <label for="maxwidth" class="form-label">Max Width</label>
+    <input class="form-control" type="input" id="maxwidth" placeholder="Pixels">
+  </div>
+
+  <div class="mb-3 card">
+    <img class="card-img-top" src="/static/assets/sky.jpg"  id="pixelitimg" alt="">
+    <canvas class="card-img-top" id="pixelitcanvas"></canvas>
+    <div class="d-grid card-body">
+      <button id="downloadimage" class="btn btn-block btn-primary">Download Image</button>
+    </div>
+  </div>
+</div>
+
+<div class="d-none">
+ <!-- color palette example-->
+ <div class="colorpalette">
+  <div class="text">
+    <button class="btn btn-primary" id="changepalette">Select palette</button>
+    <select name="paletteselector" id="paletteselector"></select>
+  </div>
+  <div class="icons" id="palettecolor">
+  
+  </div>
+ </div>
+ <!-- custom palette -->
+ <div class="infoselects">
+  <h3>Custom palette</h3>
+  <p>Click on the color to change it</p>
+  <div class="custompalette" id="custompalette">
+    <input type="color" name="customcolor" id="customcolor">
+    <button class="btn small" id="addcustomcolor">Add Color</button>
+  </div>
+  <div id="currentpallete" class="colorpalette"> </div>
+  <button class="btn small" id="savecustompalette">Save Palette</button>
+  <p>After clicking save you need to refresh to see the palette added</p>
+  <button class="btn small" id="clearcustompalettes">Clear Custom Palettes</button>
+  <p>Click clear to remove all of your custom palettes, this is irreversible. Refresh to see changes.</p>
+ </div>
+  <div class="loader">
+    <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+  </div>
+{% endblock %}
