@@ -30,13 +30,19 @@
 	<ul class="dropdown-menu">
 	  <li>
 	    <form action="/restart" method="post">
-	      <a class="dropdown-item" href="#" onclick="this.parentNode.submit();">Restart</a>
+	      <a class="dropdown-item" href="#" onclick="this.parentNode.submit();">Restart Service</a>
 	    </form>
 	  </li>
 	  <hr class="dropdown-divider">
 	  <li>
 	    <form action="/reboot" method="post">
 	      <a class="dropdown-item" href="#" onclick="this.parentNode.submit();">Reboot</a>
+	    </form>
+	  </li>
+	  <hr class="dropdown-divider">
+	  <li>
+	    <form action="/shutdown" method="post">
+	      <a class="dropdown-item" href="#" onclick="this.parentNode.submit();">Shutdown</a>
 	    </form>
 	  </li>
 	</ul>

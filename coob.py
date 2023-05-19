@@ -179,7 +179,14 @@ def reboot_post():
 
 @app.route('/restart', methods=['POST'])
 def restart_post():
-    sys.exit(0)
+    subprocess.run(['/usr/bin/systemctl', 'restart', 'coob'])
+    return redirect('/')
+
+
+@app.route('/shutdown', methods=['POST'])
+def shutdown_post():
+    subprocess.run('/usr/sbin/poweroff')
+    return redirect('/')
 
 
 @app.route('/', methods=['POST'])
