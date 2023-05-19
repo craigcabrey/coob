@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
 import argparse
+import itertools
 import os
 import subprocess
 import sys
+import tempfile
 
 
-from flask import Flask, flash, request, redirect, url_for, render_template
+from flask import abort, Flask, flash, request, redirect, url_for, render_template, send_file
 from werkzeug.utils import secure_filename
 
 
@@ -65,7 +67,6 @@ def run_cube_process(args):
     kill_cube_process()
     cube_process = subprocess.Popen(args)
 
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -108,9 +109,66 @@ def upload_get():
     return render_template('upload.html')
 
 
-@app.route('/pixelit', methods=['GET'])
-def pixelit_get():
-    return render_template('pixelit.html')
+@app.route('/prepare', methods=['POST'])
+def prepare_post():
+    file = request.files['file']
+    try:
+        iterations = int(request.form.get('iterations', 0))
+    except:
+        flash('Invalid iterations')
+        return redirect(request.url)
+
+    if not file:
+        return render_template('prepare.html')
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        filename = secure_filename(file.filename)
+        local_path = os.path.join(temp_dir, filename)
+        file.save(local_path)
+        file.close()
+
+        base_path, base_extension, *_ = os.path.splitext(local_path)
+
+        if iterations:
+            result_path = os.path.join(
+                temp_dir,
+                f'{base_path}x{iterations}{base_extension}',
+            )
+
+            command = [
+                '/usr/bin/montage',
+                *itertools.repeat(local_path, iterations),
+                '-background',
+                'none',
+                '-tile',
+                f'{iterations}x1',
+                '-geometry',
+                '+0+0',
+                result_path,
+            ]
+
+            subprocess.run(
+                command,
+                check=True,
+                timeout=300,
+            )
+
+            return send_file(result_path, as_attachment=True)
+
+        new_path = f'{base_path}.gif'
+
+        subprocess.run(
+            ['/usr/local/bin/convert-to-gif.sh', local_path, new_path],
+            check=True,
+            timeout=300,
+        )
+
+        return send_file(new_path, as_attachment=True)
+
+
+@app.route('/prepare', methods=['GET'])
+def prepare_get():
+    return render_template('prepare.html')
 
 
 @app.route('/reboot', methods=['POST'])

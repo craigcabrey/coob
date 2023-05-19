@@ -1,18 +1,56 @@
 {% extends 'base.html' %}
 
-{% set active_page = 'Pixelate' -%}
+{% set active_page = 'Prepare' -%}
 {% set scripts = [
   '/static/js/pixelit.min.js',
   '/static/js/slim.select.min.js',
   '/static/js/main.js',
+  '/static/js/prepare.js',
 ] -%}
 
 {% block content %}
-<div class="selectors">
+<form method=post
+      id="convert-gif-form"
+      enctype=multipart/form-data>
+  <fieldset class="mb-3">
+    <legend>Convert to GIF</legend>
+    <label class="form-label">Upload Video (should already be cropped to 1:1 ratio)</label>
+    <input type="file" class="form-control" name="file" required>
+  </fieldset>
   <div class="mb-3">
+    <button class="btn btn-block btn-primary" onClick="submitForm(this.form)">
+      Submit
+      <span id="convert-gif-form-submit-spinner" class="d-none spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    </button>
+  </div>
+</form>
+
+<form method=post
+      id="tile-image-form"
+      enctype=multipart/form-data>
+  <fieldset class="mb-3">
+    <legend>Tile Image</legend>
+    <label class="form-label">Upload Image</label>
+    <input type="file" class="form-control" name="file" required>
+  </fieldset>
+  <div class="mb-3">
+    <label class="form-label">Iterations</label>
+    <input type="number" class="form-control" name="iterations" value="4" required>
+  </div>
+  <div class="mb-3">
+    <button class="btn btn-block btn-primary" onClick="submitForm(this.form)">
+      Submit
+      <span id="tile-image-form-submit-spinner" class="d-none spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    </button>
+  </div>
+</form>
+
+<div class="selectors">
+  <fieldset class="mb-3">
+    <legend>Pixelate Image</legend>
     <label id="uploadimage" class="form-label" for="pixlInput">Upload Image</label>
     <input type="file" class="form-control" id="pixlInput">
-  </div>
+  </fieldset>
 
   <div class="row">
     <div class="col mb-3">
@@ -61,7 +99,6 @@
     <select name="paletteselector" id="paletteselector"></select>
   </div>
   <div class="icons" id="palettecolor">
-  
   </div>
  </div>
  <!-- custom palette -->

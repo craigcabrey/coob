@@ -1,7 +1,7 @@
 {% set navigation_bar = [
     ('/', 'Configuration'),
+    ('/prepare', 'Prepare'),
     ('/upload', 'Upload'),
-    ('/pixelit', 'Pixelate')
 ] -%}
 
 {% set active_page = active_page|default('Configuration') -%}
@@ -43,9 +43,7 @@
       </li>
     </ul>
     <hr>
-    <div class="container mt-3">
-      {% block content %} {% endblock %}
-    </div>
+    {% block content %} {% endblock %}
   </div>
   <script src="static/js/bootstrap.bundle.min.js"></script>
   {% for script in scripts %}
